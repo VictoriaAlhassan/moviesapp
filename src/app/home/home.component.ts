@@ -4,6 +4,7 @@ import { MoviesService } from '../movies.service';
 import { MovieResponse } from '../movie';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgFor, NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,29 +14,49 @@ import { NgFor, NgIf } from '@angular/common';
 })
 export class HomeComponent implements OnInit {
   movies!: MovieResponse;
-  images = 'https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}';
+  movieList!: MovieResponse;
+  action: string = 'Movies' || 'Tv shows';
 
-  constructor(private http: HttpClient, private moviesService: MoviesService) {}
+  constructor(
+    private http: HttpClient,
+    private moviesService: MoviesService,
+    private router: Router
+  ) {}
   ngOnInit(): void {
     this.getMovies();
-    // this.moviesService.getMovies().subscribe((movies) => {
-    //   this.movies = movies.results;
-    //   console.log(this.movies);
-    // });
+  }
+  clickMovies() {
+    this.router.navigate(['/movies']);
+  }
+  clickTv() {
+    this.router.navigate(['/tv']);
+  }
+  onItemClick(id: number) {
+    this.router.navigate(['/detail'], { state: { id } });
   }
 
-  // showMovies() {
-  // this.moviesService.getAllMovies();
-  // console.log(this.moviesService.getAllMovies());
-  // }
   getMovies() {
     this.moviesService.getMovies().subscribe(
       (data) => {
-        this.movies = data;
+        this.movieList = data;
+        this.movies = this.movieList;
         console.log(data);
       },
       (err) => console.log(err),
       () => console.log(`success`)
     );
+  }
+  getTvShows() {
+    this.moviesService.getTvShows(1).subscribe((data) => {
+      this.movies = data;
+    });
+  }
+
+  onButtonClick() {
+    if (this.action === 'Movies') {
+      this.getMovies();
+    } else if (this.action === 'Tv Shows') {
+      this.getTvShows();
+    }
   }
 }

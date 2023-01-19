@@ -1,10 +1,10 @@
 body {
-  background: rgb(22, 3, 3);
+  background: black;
 }
 
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: repeat(6, 1fr);
   grid-gap: 10px;
 }
 .wrapper {
@@ -16,7 +16,7 @@ a:hover {
   text-decoration: none;
 }
 .movie-list-describ {
-  background: navajowhite;
+  background: black;
   width: 100%;
   color: rgb(22, 3, 3);
   text-align: center;

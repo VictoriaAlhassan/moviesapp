@@ -10,13 +10,31 @@
 <!-- </div> -->
 <!-- </ng-template> -->
 <div class="container-fluid" style="background-color: black">
-  <div *ngIf="resultsLength > 0">
-    <div class="row">
-      <div
-        *ngFor="let movie of movieSearched?.results"
-        class="col-xl-2 col-lg-3 col-md-4 col-xs-offset-1 data-div"
-      >
-        <app-movie-item [movie]="movie"></app-movie-item>
+  <div class="container" style="background-color: black">
+    <div *ngIf="movieSearched && movieSearched.results.length > 0">
+      <div class="row">
+        <div
+          *ngFor="
+            let movie of movieSearched!.results
+              | paginate
+                : {
+                    itemsPerPage: 1,
+                    currentPage: pageNumber,
+                    totalItems: movieSearched.results.length
+                  }
+          "
+          class="col-xl-2 col-lg-3 col-md-4 col-xs-offset-1 data-div"
+        >
+          <app-movie-item [movie]="movie"></app-movie-item>
+        </div>
+        <div>
+          <pagination-controls
+            previousLabel="prev"
+            nextLabel="next"
+            (pageChange)="(movieSearched.results)"
+          >
+          </pagination-controls>
+        </div>
       </div>
     </div>
   </div>
@@ -45,11 +63,21 @@
     <div class="container" style="background-color: black">
       <div *ngIf="movies" class="wrapper" else no_result>
         <div class="row">
-          <div class="row">
-            <div class="col"><h3 style="color: white">Recommended</h3></div>
-            <div class="col"><button (click)="getMovies()">Movies</button></div>
-            <div class="col">
-              <button (click)="getTvShows()">TV Shows</button>
+          <div style="display: flex">
+            <div>
+              <h3 style="color: white; border-bottom: 5px snow white">
+                Recommended
+              </h3>
+            </div>
+            <div style="margin: 0 7px 0 25px">
+              <button (click)="getMovies()" style="border-radius: 5px">
+                Movies
+              </button>
+            </div>
+            <div>
+              <button (click)="getTvShows()" style="border-radius: 5px">
+                TV Shows
+              </button>
             </div>
           </div>
           <div class="container" style="background-color: black">
@@ -58,56 +86,77 @@
                 *ngFor="let movie of movies.results | slice : 0 : 20"
                 class="col-xl-2 col-lg-3 col-md-4 col-xs-offset-1 data-div"
               >
-                <div style="padding: 10px 0px; width: 100%">
-                  <!-- <a routerLink="/detail/{{ movie.id }}"> -->
-                  <img
-                    style="height: 240px; width: 100%; object-fit: cover"
-                    src="https://image.tmdb.org/t/p/w500/{{
-                      movie.poster_path
-                    }}"
-                    alt="poster"
-                    class="img img-responsive"
-                    (click)="onItemClick(movie.id)"
-                  />
-                  <div class="movie-list-descrip" style="color: white">
-                    <h6>{{ movie.title }}</h6>
-                    <span>
-                      {{ movie.release_date | date : "y" }} .
-                      {{ movie.original_languages }}</span
-                    >
-                  </div>
-                  <!-- </a> -->
-                </div>
+                <app-movie-item
+                  [movie]="movie"
+                  (itemClick)="onItemClick($event)"
+                >
+                </app-movie-item>
+                <!-- <div style="padding: 10px 0px; width: 100%"> -->
+                <!-- <a routerLink="/detail/{{ movie.id }}"> -->
+                <!-- <img -->
+                <!-- style=" -->
+                <!-- /* height: 240px; */ /* width: 100%; */ /* object-fit: cover; */ -->
+                <!-- /* border-radius: 5px; */ /* " */ -->
+                <!-- src="https://image.tmdb.org/t/p/w500/{{ -->
+                <!-- movie.poster_path -->
+                <!-- }}" -->
+                <!-- alt="poster" -->
+                <!-- class="img img-responsive" -->
+                <!-- (click)="onItemClick(movie.id)" -->
+                <!-- /> -->
+                <!-- <div class="movie-list-descrip" style="color: white"> -->
+                <!-- <h6>{{ movie.title | slice : 0 : 24 }}</h6> -->
+                <!-- <span> -->
+                <!-- {{ movie.release_date | date : "y" }} |votes -->
+                <!-- {{ movie.vote_count }}</span -->
+                <!-- > -->
+                <!-- </div> -->
+                <!-- </a> -->
+                <!-- </div> -->
+                <!-- </div> -->
               </div>
             </div>
+            <div style="display: flex; justify-content: end">
+              <button
+                (click)="viewAll()"
+                style="
+                  background-color: transparent;
+                  color: blue;
+                  border: 1px solid blue;
+                  padding: 5px 20px 5px 10px;
+                  border-radius: 5px;
+                "
+              >
+                View All
+              </button>
+            </div>
           </div>
-          <div class="col"><button (click)="viewAll()">View All</button></div>
+          <!-- <div -->
+          <!-- *ngFor="let tv of tvShows.results | slice : 0 : 20" -->
+          <!-- class="col-xl-2 col-lg-3 col-md-4 col-xs-offset-1 data-div" -->
+          <!-- > -->
+          <!-- <div style="padding: 10px 0px; width: 100%"> -->
+          <!-- <a routerLink="/detail/{{ movie.id }}"> -->
+          <!-- <img -->
+          <!-- style="height: 240px; width: 100%; object-fit: cover" -->
+          <!-- src="https://image.tmdb.org/t/p/w500/{{ tv.poster_path }}" -->
+          <!-- alt="poster" -->
+          <!-- class="img img-responsive" -->
+          <!-- (click)="onItemClick(tv.id)" -->
+          <!-- /> -->
+          <!-- <div class="movie-list-descrip"> -->
+          <!-- <span> -->
+          <!-- {{ tv.release_date | date : "y" }} | votes: -->
+          <!-- {{ tv.vote_count }}</span -->
+          <!-- > -->
+          <!-- </div> -->
+          <!-- </a> -->
+          <!-- </div> -->
+          <!-- </div> -->
         </div>
-        <!-- <div -->
-        <!-- *ngFor="let tv of tvShows.results | slice : 0 : 20" -->
-        <!-- class="col-xl-2 col-lg-3 col-md-4 col-xs-offset-1 data-div" -->
-        <!-- > -->
-        <!-- <div style="padding: 10px 0px; width: 100%"> -->
-        <!-- <a routerLink="/detail/{{ movie.id }}"> -->
-        <!-- <img -->
-        <!-- style="height: 240px; width: 100%; object-fit: cover" -->
-        <!-- src="https://image.tmdb.org/t/p/w500/{{ tv.poster_path }}" -->
-        <!-- alt="poster" -->
-        <!-- class="img img-responsive" -->
-        <!-- (click)="onItemClick(tv.id)" -->
-        <!-- /> -->
-        <!-- <div class="movie-list-descrip"> -->
-        <!-- <span> -->
-        <!-- {{ tv.release_date | date : "y" }} | votes: -->
-        <!-- {{ tv.vote_count }}</span -->
-        <!-- > -->
-        <!-- </div> -->
-        <!-- </a> -->
-        <!-- </div> -->
-        <!-- </div> -->
       </div>
-    </div>
 
-    <ng-template #no_result>No result found</ng-template>
+      <ng-template #no_result>No result found</ng-template>
+    </div>
   </div>
 </div>

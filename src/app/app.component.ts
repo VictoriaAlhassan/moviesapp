@@ -17,13 +17,6 @@ import { fromEvent } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 const apiKey = '47a316d4e8745085aba3749bca6e3a38';
-const params = new HttpParams({
-  fromObject: {
-    action: 'opensearch',
-    format: 'json',
-    origin: '*',
-  },
-});
 
 @Component({
   selector: 'app-root',
@@ -33,9 +26,11 @@ const params = new HttpParams({
 export class AppComponent implements OnInit {
   @ViewChild('movieSearchInput', { static: true })
   movieSearchInput!: ElementRef;
-  isSearching!: boolean;
+
   title = 'moviesapp';
   movies: any;
+  loading: boolean = false;
+  term!: string;
 
   // searchForm: FormGroup = new FormGroup({
   // search: new FormControl(''),
@@ -47,8 +42,7 @@ export class AppComponent implements OnInit {
   // });
   // }
 
-  constructor(private router: Router, private http: HttpClient) {
-    this.isSearching = false;
+  constructor(private router: Router, private moviesService: MoviesService) {
     this.movies = [];
     console.log(this.movieSearchInput);
   }
@@ -58,49 +52,36 @@ export class AppComponent implements OnInit {
         map((event: any) => {
           return event.target.value;
         }),
-        filter((res) => res.length > 2),
+        // filter((res) => res.length),
         debounceTime(1000),
         distinctUntilChanged()
       )
       .subscribe((text: string) => {
-        this.isSearching = true;
-
-        this.searchGetCall(text).subscribe(
-          (res) => {
-            console.log('res', res);
-            this.isSearching = false;
-            this.movies = res;
-          },
-          (err) => {
-            this.isSearching = false;
-            console.log('error', err);
-          }
-        );
+        this.moviesService.searchGetCall(text);
+        this.term = text;
       });
   }
 
-  searchGetCall(term: string) {
-    if (term === '') {
-      return of([]);
-    }
-    return this.http.get(
-      'https://api.themoviedb.org/3/search/movie?' +
-        '&api_key=' +
-        apiKey +
-        '&query=' +
-        term,
-      { params: params }
-    );
-  }
   clickMovies() {
+    this.loading = true;
     this.router.navigate(['/movies']);
+    this.loading = false;
   }
 
   clickTv() {
+    this.loading = true;
     this.router.navigate(['/tv']);
+    this.loading = false;
   }
 
   clickHome() {
+    this.moviesService.searchResults.next({
+      page: 0,
+      total_pages: 0,
+      total_results: 0,
+      results: [],
+    });
+    this.movieSearchInput.nativeElement.value = '';
     this.router.navigate(['']);
   }
 }

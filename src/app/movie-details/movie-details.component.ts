@@ -18,10 +18,12 @@ export class MovieDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe((data) => {
-      console.log(data);
+    // this.id = history.state.id;
+    this.activatedRoute.params.subscribe((params: Params) => {
+      this.id = +params['id'];
+      this.getMovieDatail(this.id);
     });
-    this.getMovieDatail(this.id);
+    // this.getMovieDatail(this.id);
   }
 
   getMovieDatail(id: number) {

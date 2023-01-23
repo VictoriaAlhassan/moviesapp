@@ -12,6 +12,7 @@ import { MoviesService } from '../movies.service';
 export class MoviesComponent {
   movies!: MovieResponse;
   pageNumber: number = 1;
+  loading: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -23,15 +24,20 @@ export class MoviesComponent {
   }
 
   getMovieList(page: number) {
+    this.loading = true;
     this.pageNumber = page;
     this.moviesService.getAllMovies(page).subscribe(
       (data) => {
         this.movies = data;
 
         console.log(data);
+        this.loading = false;
       },
       (err) => console.log(err),
       () => console.log(`success`)
     );
+  }
+  onItemClick(id: number) {
+    this.router.navigate(['/detail']);
   }
 }

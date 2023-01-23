@@ -12,6 +12,7 @@ import { MoviesService } from '../movies.service';
 export class TvComponent {
   movies!: MovieResponse;
   pageNumber: number = 1;
+  loading: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -22,14 +23,20 @@ export class TvComponent {
     this.getTvShows(1);
   }
   getTvShows(page: number) {
+    this.loading = true;
     this.pageNumber = page;
     this.moviesService.getTvShows(page).subscribe(
       (data) => {
         this.movies = data;
         console.log(data);
+        this.loading = false;
       },
       (err) => console.log(err),
       () => console.log(`success`)
     );
+  }
+
+  onItemClick(id: number) {
+    this.router.navigate(['/tvdetail']);
   }
 }

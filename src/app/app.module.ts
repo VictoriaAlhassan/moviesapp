@@ -13,6 +13,8 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgIf, NgFor } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TvDetailsComponent } from './tv-details/tv-details.component';
+import { MovieItemComponent } from './movie-item/movie-item.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TvComponent,
     MoviesComponent,
     MovieDetailsComponent,
+    TvDetailsComponent,
+    MovieItemComponent,
   ],
   imports: [
     BrowserModule,

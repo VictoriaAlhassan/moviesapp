@@ -1,31 +1,33 @@
 <div class="container-fluid" style="background-color: black">
-  <div class="container" style="background-color: black"></div>
-  <div class="row">
-    <div style="display: flex">
-      <div class="card" style="width: 35rem">
-        <img
-          src="https://image.tmdb.org/t/p/w500/{{ movie?.poster_path }}"
-          alt="poster"
-        />
-      </div>
-      <div>
-        <h2 style="color: white">{{ movie?.title }}</h2>
-        <p style="color: white">{{ movie?.overview }}</p>
-        <div style="display: flex; color: white">
-          <p>Languages:</p>
-          {{ movie.original_languages }}
+  <!-- <div class="container" style="background-color: black"></div> -->
+  <div *ngIf="movie.id" class="wrapper" else no_result>
+    <div class="row">
+      <div style="display: flex; margin-top: 120px">
+        <div class="card" style="width: 35rem; height: 100vh">
+          <img
+            src="https://image.tmdb.org/t/p/w500/{{ movie?.poster_path }}"
+            alt="poster"
+            style="height: 650px"
+          />
         </div>
-        <div style="display: flex; color: white">
-          <p>Release:</p>
-          {{ movie.release_date }}
-        </div>
-        <div
-          style="display: flex; color: white; margin: 0 10px; padding: 0 10px"
-        >
-          <p>Popularity:</p>
-          {{ movie.popularity }}
+        <div style="margin: 0 10px">
+          <h2 style="color: white">{{ movie?.title }}</h2>
+          <p style="color: white">{{ movie?.overview }}</p>
+          <div style="display: flex; color: white; margin: 0 10px">
+            <p style="margin-right: 10px">Languages:</p>
+            {{ movie.original_languages }}
+          </div>
+          <div style="display: flex; color: white; margin: 0 10px">
+            <p style="margin-right: 10px">Release:</p>
+            {{ movie.release_date }}
+          </div>
+          <div style="display: flex; color: white; margin: 0 10px">
+            <p style="margin-right: 10px">Popularity:</p>
+            {{ movie.popularity }}
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <ng-template #no_result>No result found</ng-template>
 </div>

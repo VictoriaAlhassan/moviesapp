@@ -28,50 +28,44 @@ export class AppComponent implements OnInit {
   movieSearchInput!: ElementRef;
 
   title = 'moviesapp';
-  movies: any;
+
   loading: boolean = false;
   term!: string;
-
-  // searchForm: FormGroup = new FormGroup({
-  // search: new FormControl(''),
-  // });
-
-  // search() {
-  // this.moviesService.searchEntries().subscribe((data) => {
-  // this.movies = data;
-  // });
-  // }
+  page!: number;
+  isActive: boolean = false;
 
   constructor(private router: Router, private moviesService: MoviesService) {
-    this.movies = [];
     console.log(this.movieSearchInput);
   }
   ngOnInit(): void {
+    console.log(this.router.url);
     fromEvent(this.movieSearchInput.nativeElement, 'keyup')
       .pipe(
         map((event: any) => {
           return event.target.value;
         }),
-        // filter((res) => res.length),
+
         debounceTime(1000),
         distinctUntilChanged()
       )
       .subscribe((text: string) => {
+        this.moviesService.searchTerm = text;
         this.moviesService.searchGetCall(text);
-        this.term = text;
       });
   }
 
   clickMovies() {
     this.loading = true;
-    this.router.navigate(['/movies']);
+    this.router.navigate(['/movies'], { queryParams: { page: 1 } });
     this.loading = false;
+    this.isActive = true;
   }
 
   clickTv() {
     this.loading = true;
     this.router.navigate(['/tv']);
     this.loading = false;
+    this.isActive = true;
   }
 
   clickHome() {
@@ -82,6 +76,9 @@ export class AppComponent implements OnInit {
       results: [],
     });
     this.movieSearchInput.nativeElement.value = '';
+    this.loading = true;
     this.router.navigate(['']);
+    this.loading = false;
+    this.isActive = true;
   }
 }

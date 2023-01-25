@@ -20,8 +20,11 @@ export class TvDetailsComponent implements OnInit {
     this.getTvDatail(this.id);
   }
   getTvDatail(id: number) {
-    this.moviesService.getTvShow(id).subscribe((data) => {
-      this.movie = data;
-    });
+    this.moviesService.getTvShow(id).subscribe(
+      (data) => {
+        this.movie = data;
+      },
+      (err) => alert(err)
+    );
   }
 }

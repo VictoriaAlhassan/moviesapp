@@ -1,16 +1,22 @@
 <div style="padding: 10px 0px; width: 100%">
   <a routerLink="/detail/{{ movie.id }}">
     <img
-      style="height: 240px; width: 100%; object-fit: cover; border-radius: 5px"
+      style="
+        height: 240px;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-top: 0;
+      "
       src="https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}"
       alt="poster"
       class="img img-responsive"
     />
   </a>
 
-  <div class="movie-list-descrip" style="color: white">
-    <h6>{{ movie.title | slice : 0 : 24 }}</h6>
-    <span>
+  <div class="movie-list-descrip">
+    <h6 style="color: white">{{ movie.title | slice : 0 : 24 }}</h6>
+    <span style="color: gray">
       {{ movie.release_date | date : "y" }} | votes:
       {{ movie.vote_count }}</span
     >

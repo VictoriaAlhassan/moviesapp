@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MovieResponse } from '../movie';
 import { MoviesService } from '../movies.service';
+import { ActivatedRoute } from '@angular/router';
+import { Movie } from '../movie';
 
 @Component({
   selector: 'app-movies',
@@ -13,17 +15,23 @@ export class MoviesComponent {
   movies!: MovieResponse;
   pageNumber: number = 1;
   loading: boolean = false;
+  movie!: Movie;
 
   constructor(
     private http: HttpClient,
     public moviesService: MoviesService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
   ngOnInit(): void {
-    this.getMovieList(1);
+    this.activatedRoute.queryParams.subscribe((params) => {
+      this.pageNumber = params['page'];
+      this.getMovieList(this.pageNumber);
+    });
   }
 
   getMovieList(page: number) {
+    this.updateUrl(page);
     this.loading = true;
     this.pageNumber = page;
     this.moviesService.getAllMovies(page).subscribe(
@@ -33,11 +41,23 @@ export class MoviesComponent {
         console.log(data);
         this.loading = false;
       },
-      (err) => console.log(err),
+      (err) => alert(err),
       () => console.log(`success`)
     );
   }
+  updateUrl(pageNumber: number) {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+        page: pageNumber,
+      },
+      replaceUrl: true,
+    });
+  }
   onItemClick(id: number) {
     this.router.navigate(['/detail']);
+  }
+  trackByMovieId(index: number, movie: Movie) {
+    return movie.id;
   }
 }

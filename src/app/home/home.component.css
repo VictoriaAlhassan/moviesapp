@@ -21,3 +21,19 @@ a:hover {
   color: rgb(22, 3, 3);
   text-align: center;
 }
+.pagination {
+  color: white;
+}
+.viewbtn {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 5px 20px 5px 10px;
+  border-radius: 5px;
+}
+.container {
+  background-color: black;
+}
+.container-fluid {
+  background-color: black;
+}

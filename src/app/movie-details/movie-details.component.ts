@@ -11,6 +11,7 @@ import { MoviesService } from '../movies.service';
 export class MovieDetailsComponent implements OnInit {
   id!: number;
   movie!: any;
+  errorMessage!: string;
 
   constructor(
     private moviesService: MoviesService,
@@ -27,8 +28,16 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   getMovieDatail(id: number) {
-    this.moviesService.getMovie(id).subscribe((data) => {
-      this.movie = data;
-    });
+    this.moviesService.getMovie(id).subscribe(
+      (data) => {
+        this.movie = data;
+      },
+      (err) => {
+        this.errorMessage = 'The resouce you requested could not be found';
+        // this.errorMessage = err.message;
+        alert(this.errorMessage);
+        () => console.log(`success`);
+      }
+    );
   }
 }

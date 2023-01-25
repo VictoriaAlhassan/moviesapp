@@ -17,3 +17,6 @@
     transform: rotate(360deg);
   }
 }
+.pagination {
+  color: white;
+}

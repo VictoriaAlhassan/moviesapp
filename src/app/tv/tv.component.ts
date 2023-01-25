@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MovieResponse } from '../movie';
 import { MoviesService } from '../movies.service';
+import { Movie } from '../movie';
 
 @Component({
   selector: 'app-tv',
@@ -31,12 +32,15 @@ export class TvComponent {
         console.log(data);
         this.loading = false;
       },
-      (err) => console.log(err),
+      (err) => alert(err),
       () => console.log(`success`)
     );
   }
 
   onItemClick(id: number) {
     this.router.navigate(['/tvdetail']);
+  }
+  trackByMovieId(index: number, movie: Movie) {
+    return movie.id;
   }
 }

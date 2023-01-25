@@ -20,6 +20,7 @@ export class MoviesService {
   query: string = '&query';
   moviesSubject = new Subject<MovieResponse>();
   searchResults = new Subject<MovieResponse>();
+  searchTerm: string = '';
 
   constructor(private http: HttpClient) {}
   endPoint =
@@ -71,7 +72,7 @@ export class MoviesService {
     return this.http.get(url + '&page=' + page_num);
   }
 
-  searchGetCall(term: string, page: number = 0) {
+  searchGetCall(term: string, page: number = 1) {
     console.log(term);
     const params = new HttpParams({
       fromObject: {

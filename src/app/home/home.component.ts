@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
   resultsLength: number = 0;
   currentTab: string = 'movies';
   pageNumber: number = 1;
-  isActive: boolean = false;
+  term!: string;
 
   constructor(
     private http: HttpClient,
@@ -46,7 +46,6 @@ export class HomeComponent implements OnInit {
 
   getMovies() {
     this.currentTab = 'movies';
-    this.isActive = true;
     this.moviesService.movieObservable().subscribe(
       (data) => {
         this.movieList = data;
@@ -60,7 +59,7 @@ export class HomeComponent implements OnInit {
   }
   getTvShows() {
     this.currentTab = 'tv_shows';
-    this.isActive = true;
+
     this.moviesService.getTvShows(1).subscribe((data) => {
       this.movies = data;
     });
@@ -73,13 +72,6 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  // onButtonClick() {
-  // if (this.action === 'Movies') {
-  // this.getMovies();
-  // } else if (this.action === 'Tv Shows') {
-  // this.getTvShows();
-  // }
-  // }
   showSearchResults() {
     this.moviesService.searchObservable().subscribe((movies) => {
       this.movieSearched = movies;
@@ -87,16 +79,8 @@ export class HomeComponent implements OnInit {
       console.log(this.resultsLength);
     });
   }
-  getMovieList(page: number) {
-    let term = document.getElementById('movieSearchInput')! as HTMLInputElement;
+  getSearchResults(page: number) {
     this.pageNumber = page;
-    this.moviesService.searchGetCall(term, page).subscribe(
-      (data) => {
-        this.movies = data;
-        console.log(data);
-      },
-      (err) => console.log(err),
-      () => console.log(`success`)
-    );
+    this.moviesService.searchGetCall(this.moviesService.searchTerm, page);
   }
 }

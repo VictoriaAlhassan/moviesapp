@@ -15,14 +15,19 @@ export class MoviesComponent {
   movies!: MovieResponse;
   pageNumber: number = 1;
   loading: boolean = false;
-  movie!: Movie;
+  errorMessage!: string;
 
   constructor(
     private http: HttpClient,
     public moviesService: MoviesService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+    let movies = localStorage.getItem('movie');
+    if (movies != null) {
+      this.movies = JSON.parse(movies);
+    }
+  }
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params) => {
       this.pageNumber = params['page'];
@@ -37,11 +42,15 @@ export class MoviesComponent {
     this.moviesService.getAllMovies(page).subscribe(
       (data) => {
         this.movies = data;
+        localStorage.setItem('movies', JSON.stringify(this.movies));
 
         console.log(data);
         this.loading = false;
       },
-      (err) => alert(err),
+      (err) => {
+        this.errorMessage = 'you are offline';
+        alert(this.errorMessage);
+      },
       () => console.log(`success`)
     );
   }

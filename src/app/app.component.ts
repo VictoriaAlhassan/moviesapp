@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
   loading: boolean = false;
   term!: string;
   page!: number;
-  isActive: boolean = false;
+  isActive: string = 'home';
 
   constructor(private router: Router, private moviesService: MoviesService) {
     console.log(this.movieSearchInput);
@@ -58,14 +58,14 @@ export class AppComponent implements OnInit {
     this.loading = true;
     this.router.navigate(['/movies'], { queryParams: { page: 1 } });
     this.loading = false;
-    this.isActive = true;
+    this.isActive = 'movies';
   }
 
   clickTv() {
     this.loading = true;
     this.router.navigate(['/tv']);
     this.loading = false;
-    this.isActive = true;
+    this.isActive = 'tv';
   }
 
   clickHome() {
@@ -79,6 +79,9 @@ export class AppComponent implements OnInit {
     this.loading = true;
     this.router.navigate(['']);
     this.loading = false;
-    this.isActive = true;
+    this.isActive = 'home';
+  }
+  checkingIsActive(route: string) {
+    return this.isActive === route;
   }
 }

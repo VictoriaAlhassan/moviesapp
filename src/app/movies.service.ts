@@ -30,6 +30,7 @@ export class MoviesService {
     return this.http.get<any>(this.endPoint).subscribe((movies) => {
       this.movies = movies;
       this.moviesSubject.next(this.movies);
+      localStorage.setItem('movies', JSON.stringify(this.movies));
     });
   }
   movieObservable() {

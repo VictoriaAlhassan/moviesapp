@@ -2,11 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { MovieResponse } from '../movie';
 import { MoviesService } from '../movies.service';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-movie-details',
   templateUrl: './movie-details.component.html',
   styleUrls: ['./movie-details.component.css'],
+  animations: [
+    trigger('openClose', [
+      transition('closed => open', [animate('0.5s')]),
+      transition('open => closed', [animate('1s')]),
+    ]),
+  ],
 })
 export class MovieDetailsComponent implements OnInit {
   id!: number;

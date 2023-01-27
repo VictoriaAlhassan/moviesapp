@@ -1,9 +1,21 @@
 <header>
   <div class="row header-container">
     <ul>
-      <li [ngClass]="{ active: isActive }" (click)="clickHome()">Home</li>
-      <li [ngClass]="{ active: isActive }" (click)="clickMovies()">Movies</li>
-      <li [ngClass]="{ active: isActive }" (click)="clickTv()">Tv</li>
+      <li
+        [ngClass]="{ active: checkingIsActive('home') }"
+        (click)="clickHome()"
+      >
+        Home
+      </li>
+      <li
+        [ngClass]="{ active: checkingIsActive('movies') }"
+        (click)="clickMovies()"
+      >
+        Movies
+      </li>
+      <li [ngClass]="{ active: checkingIsActive('tv') }" (click)="clickTv()">
+        Tv
+      </li>
 
       <li>
         <input
